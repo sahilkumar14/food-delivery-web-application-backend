@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 
 
 
+
+
+
 function createUser(req,res){
     let{name,email,password} =req.body;
 
