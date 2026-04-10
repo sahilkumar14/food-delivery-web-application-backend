@@ -3,16 +3,16 @@ import User from "../models/usermodels.models.js";
 import bcrypt from "bcrypt";
 
 function createUser(req,res){
-    let{name,email,password} =req.body;
+    let{name,email,password,address} =req.body;
 
     try{
         let pass = bcrypt.hashSync(password,10);
         password = pass;
-        let obj = new User ({name,email,password});
+        let obj = new User ({name,email,password,address});
         obj.save()
         .then(()=>{
             console.log("saved");
-            res.status(StatusCodes.CREATED.code).json({
+           return res.status(StatusCodes.CREATED.code).json({
                 code:StatusCodes.CREATED.code,
                 message:StatusCodes.CREATED.message,
                 data:null
@@ -24,7 +24,7 @@ function createUser(req,res){
 
     }catch(err){
         console.log("create ",err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
             code:StatusCodes.INTERNAL_SERVER_ERROR.code,
             message:StatusCodes.INTERNAL_SERVER_ERROR.message,
             data:null
