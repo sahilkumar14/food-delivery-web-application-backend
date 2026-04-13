@@ -18,15 +18,20 @@ const categorySchema = new mongoose.Schema({
 const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+       
     },
+    email: { type: String, unique: true },
+    password:{type:String,unique:true,match:[
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+            ]},
     location: {
         type: String,
-        required: true
     },
     menu: {
         type: [categorySchema],
-        required: true
+        required: true,
+        default:[]
+        
     }
 });
 
