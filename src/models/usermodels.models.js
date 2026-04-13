@@ -1,16 +1,29 @@
 import mongoose from "../config/connection.Db.js";
 
 const userSchema = new mongoose.Schema({
-    name:String,
+    name:{
+        type:String,
+    },
     email:{
         type:String,
         unique:true},
-    password:String,
-    role: {
-        type: String,
-        enum: ['customer', 'restaurant', 'agent'],
-        default: 'customer'
-    }
-}, { timestamps: true })
-
+    password:{
+            type:String,
+            required:true,
+            match:[
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+            ]
+    },
+    mob:{
+        type:String,
+        require:true,
+        minLength:[10],
+        maxLength:[12]
+    },
+    dob:{type:Date,
+        require:true,
+        trim:true
+    },
+    address:String
+})
 export default mongoose.model("User",userSchema);
