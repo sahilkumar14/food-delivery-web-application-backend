@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-pro-js";
 import Restaurant from "../models/restaurant.models.js";
+import Order from "../models/myorders.models.js";
 import bcrypt from  "bcrypt";
 
 export async function createRestorant(req, res) {
@@ -123,6 +124,38 @@ export async function addMenu(req,res){
 
 
     }catch (err) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
+            code: StatusCodes.INTERNAL_SERVER_ERROR.code,
+            message: err.message,
+            data: null
+        });
+    }
+}
+
+// get restaurant orders
+export async function getRestaurantOrders(req, res) {
+    try {
+        const { restaurantId } = req.params;
+        
+        if (!restaurantId) {
+            return res.status(StatusCodes.BAD_REQUEST.code).json({
+                code: StatusCodes.BAD_REQUEST.code,
+                message: "Restaurant ID is required",
+                data: null
+            });
+        }
+
+        const orders = await Order.find({ restaurantId })
+            .populate('userId', 'name email mob')
+            .sort({ createdAt: -1 });
+
+        return res.status(StatusCodes.OK.code).json({
+            code: StatusCodes.OK.code,
+            message: "Orders fetched successfully",
+            data: orders
+        });
+
+    } catch (err) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
             code: StatusCodes.INTERNAL_SERVER_ERROR.code,
             message: err.message,
