@@ -1,7 +1,5 @@
 import mongoose from "../config/connection.Db.js";
 
-
-
 const userSchema = new mongoose.Schema({
     name:{
         type:String,

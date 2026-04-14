@@ -6,12 +6,12 @@ export async function createUser(req,res){
     let{name,email,password,mob,dob,address} =req.body;
 
     try{
-         const data =  await User.findOne({email})
-         if(data){
+         const existingUser = await User.findOne({ email })
+         if (existingUser) {
             return res.status(StatusCodes.BAD_REQUEST.code).json({
-                code:StatusCodes.BAD_REQUEST.code,
-                message:StatusCodes.BAD_REQUEST.message,
-                data:null
+                code: StatusCodes.BAD_REQUEST.code,
+                message: "A user already exists with this email.",
+                data: null
             })
          }
         let pass = bcrypt.hashSync(password,10);
@@ -21,7 +21,12 @@ export async function createUser(req,res){
            return res.status(StatusCodes.CREATED.code).json({
                 code:StatusCodes.CREATED.code,
                 message:StatusCodes.CREATED.message,
-                data:null
+                data: {
+                  _id: obj._id,
+                  name: obj.name,
+                  email: obj.email,
+                  mob: obj.mob,
+                }
             })
     }catch(err){
         console.log("create ",err);
