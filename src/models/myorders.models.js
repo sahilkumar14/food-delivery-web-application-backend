@@ -16,6 +16,12 @@ const orderSchema = new mongoose.Schema({
         ref: "DeliveryAgent",
         default: null
     },
+    rejectedByAgents: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "DeliveryAgent"
+        }
+    ],
     items: [
         {
             name: String,
