@@ -8,7 +8,10 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://food-delivery-web-application-front-henna.vercel.app",
+    credentials: true
+}));
 
 app.use("/",router);
 
