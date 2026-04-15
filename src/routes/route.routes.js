@@ -1,5 +1,5 @@
 import express from "express";
-import {createUser, userLogin } from "../controller/user.controller.js";
+import {createUser, userLogin, updateUser } from "../controller/user.controller.js";
 import {
     createRestorant,
     addMenu,
@@ -16,6 +16,7 @@ import { getNearbyRestaurants } from "../controller/nearRestaurant.controller.js
 import {agentLogin, createAgent }from "../controller/agent.controller.js";
 import {
     createOrder,
+    getUserOrders,
     getAvailableAgentOrders,
     getAgentActiveOrders,
     updateAgentOrderDecision,
@@ -27,6 +28,7 @@ const router = express.Router();
 
 router.post("/reg",createUser);
 router.post("/login",userLogin);
+router.patch("/user/:userId", updateUser);
 //agent
 router.post("/agentCreate",createAgent)
 router.post("/agentLogin",agentLogin);
@@ -50,6 +52,7 @@ router.get("/restaurant/:id/menu", getRestaurantMenu);
 
 //order
 router.post("/order",createOrder)
+router.get("/user/orders/:userId", getUserOrders)
 router.patch("/restaurant/orders/:orderId/status", updateRestaurantOrderStatus)
 router.get("/agent/orders/available/:agentId", getAvailableAgentOrders)
 router.get("/agent/orders/active/:agentId", getAgentActiveOrders)

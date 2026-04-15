@@ -387,3 +387,33 @@ export async function updateRestaurantOrderStatus(req, res) {
         });
     }
 }
+
+export async function getUserOrders(req, res) {
+    const { userId } = req.params;
+
+    try {
+        if (!userId) {
+            return res.status(StatusCodes.BAD_REQUEST.code).json({
+                code: StatusCodes.BAD_REQUEST.code,
+                message: "User id is required",
+                data: null
+            });
+        }
+
+        const orders = await Order.find({ userId })
+            .populate("restaurantId", "name location")
+            .sort({ createdAt: -1 });
+
+        return res.status(StatusCodes.OK.code).json({
+            code: StatusCodes.OK.code,
+            message: "User orders fetched successfully",
+            data: orders
+        });
+    } catch (err) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
+            code: StatusCodes.INTERNAL_SERVER_ERROR.code,
+            message: err.message,
+            data: null
+        });
+    }
+}

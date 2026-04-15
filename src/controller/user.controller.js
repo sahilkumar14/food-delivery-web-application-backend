@@ -26,6 +26,7 @@ export async function createUser(req,res){
                   name: obj.name,
                   email: obj.email,
                   mob: obj.mob,
+                  dob: obj.dob || null,
                   address: obj.address,
                   addressCoordinates: obj.addressCoordinates || null,
                 }
@@ -75,6 +76,7 @@ export async function userLogin(req, res) {
                     name: user.name,
                     email: user.email,
                     mob: user.mob,
+                    dob: user.dob || null,
                     address: user.address,
                     addressCoordinates: user.addressCoordinates || null
                 }
@@ -82,6 +84,60 @@ export async function userLogin(req, res) {
     } catch (err) {
         console.log("login error", err);
 
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
+            code: StatusCodes.INTERNAL_SERVER_ERROR.code,
+            message: StatusCodes.INTERNAL_SERVER_ERROR.message,
+            data: null
+        });
+    }
+}
+
+export async function updateUser(req, res) {
+    try {
+        const { userId } = req.params;
+        const { name, mob, dob, address, addressCoordinates } = req.body;
+
+        if (!userId) {
+            return res.status(StatusCodes.BAD_REQUEST.code).json({
+                code: StatusCodes.BAD_REQUEST.code,
+                message: "User ID is required",
+                data: null
+            });
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND.code).json({
+                code: StatusCodes.NOT_FOUND.code,
+                message: "User not found",
+                data: null
+            });
+        }
+
+        if (name !== undefined) user.name = name;
+        if (mob !== undefined) user.mob = mob;
+        if (dob !== undefined) user.dob = dob;
+        if (address !== undefined) user.address = address;
+        if (addressCoordinates !== undefined) user.addressCoordinates = addressCoordinates;
+
+        await user.save();
+
+        return res.status(StatusCodes.OK.code).json({
+            code: StatusCodes.OK.code,
+            message: "User updated successfully",
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                mob: user.mob,
+                dob: user.dob || null,
+                address: user.address,
+                addressCoordinates: user.addressCoordinates || null
+            }
+        });
+    } catch (err) {
+        console.log("update user error", err);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
             code: StatusCodes.INTERNAL_SERVER_ERROR.code,
             message: StatusCodes.INTERNAL_SERVER_ERROR.message,
