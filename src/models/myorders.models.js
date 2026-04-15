@@ -1,5 +1,18 @@
 import mongoose from "mongoose";
 
+const coordinatesSchema = new mongoose.Schema({
+    lat: Number,
+    lng: Number
+}, { _id: false });
+
+const locationSnapshotSchema = new mongoose.Schema({
+    address: String,
+    coordinates: {
+        type: coordinatesSchema,
+        default: null
+    }
+}, { _id: false });
+
 const orderSchema = new mongoose.Schema({
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
@@ -35,12 +48,20 @@ const orderSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ["Pending", "Confirmed", "Out for Delivery", "Delivered", "Cancelled"], 
+        enum: ["Pending", "Confirmed", "Ready for Pickup", "Assigned to Agent", "Picked from Restaurant", "Out for Delivery", "Delivered", "Cancelled"], 
         default: "Pending" 
     },
     address: { 
         type: String, 
         required: true 
+    },
+    pickupLocation: {
+        type: locationSnapshotSchema,
+        default: null
+    },
+    deliveryLocation: {
+        type: locationSnapshotSchema,
+        default: null
     }
 }, { timestamps: true });
 

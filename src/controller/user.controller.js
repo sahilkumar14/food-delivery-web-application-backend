@@ -3,7 +3,7 @@ import User from "../models/usermodels.models.js";
 import bcrypt from "bcrypt";
 
 export async function createUser(req,res){
-    let{name,email,password,mob,dob,address} =req.body;
+    let{name,email,password,mob,dob,address,addressCoordinates} =req.body;
 
     try{
          const existingUser = await User.findOne({ email })
@@ -16,7 +16,7 @@ export async function createUser(req,res){
          }
         let pass = bcrypt.hashSync(password,10);
         password = pass;
-        let obj = new User ({name,email,password,mob,dob,address});
+        let obj = new User ({name,email,password,mob,dob,address,addressCoordinates: addressCoordinates || null});
         await obj.save()
            return res.status(StatusCodes.CREATED.code).json({
                 code:StatusCodes.CREATED.code,
@@ -26,6 +26,8 @@ export async function createUser(req,res){
                   name: obj.name,
                   email: obj.email,
                   mob: obj.mob,
+                  address: obj.address,
+                  addressCoordinates: obj.addressCoordinates || null,
                 }
             })
     }catch(err){
@@ -73,7 +75,8 @@ export async function userLogin(req, res) {
                     name: user.name,
                     email: user.email,
                     mob: user.mob,
-                    address: user.address
+                    address: user.address,
+                    addressCoordinates: user.addressCoordinates || null
                 }
             });
     } catch (err) {

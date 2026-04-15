@@ -8,13 +8,14 @@ const sanitizeRestaurant = (restaurant) => ({
     name: restaurant.name,
     email: restaurant.email,
     location: restaurant.location,
+    locationCoordinates: restaurant.locationCoordinates || null,
     menu: restaurant.menu,
     createdAt: restaurant.createdAt,
     updatedAt: restaurant.updatedAt
 });
 
 export async function createRestorant(req, res) {
-    const { name,email,password, location} = req.body;
+    const { name,email,password, location, locationCoordinates} = req.body;
 
     try {
         let pass = bcrypt.hashSync(password,10);
@@ -40,6 +41,7 @@ export async function createRestorant(req, res) {
             email,
             password:pass,
             location: location,
+            locationCoordinates: locationCoordinates || null,
         });
 
         await newRestaurant.save();
@@ -197,6 +199,45 @@ export async function getRestaurantOrders(req, res) {
             data: orders
         });
 
+    } catch (err) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
+            code: StatusCodes.INTERNAL_SERVER_ERROR.code,
+            message: err.message,
+            data: null
+        });
+    }
+}
+
+export async function updateRestaurantLocation(req, res) {
+    const { restaurantId } = req.params;
+    const { location, locationCoordinates } = req.body;
+
+    try {
+        const restaurant = await Restaurant.findById(restaurantId);
+
+        if (!restaurant) {
+            return res.status(StatusCodes.NOT_FOUND.code).json({
+                code: StatusCodes.NOT_FOUND.code,
+                message: "Restaurant not found",
+                data: null
+            });
+        }
+
+        if (location) {
+            restaurant.location = location;
+        }
+
+        if (locationCoordinates) {
+            restaurant.locationCoordinates = locationCoordinates;
+        }
+
+        await restaurant.save();
+
+        return res.status(StatusCodes.OK.code).json({
+            code: StatusCodes.OK.code,
+            message: "Restaurant location updated successfully",
+            data: sanitizeRestaurant(restaurant)
+        });
     } catch (err) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
             code: StatusCodes.INTERNAL_SERVER_ERROR.code,
