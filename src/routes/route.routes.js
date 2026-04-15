@@ -8,6 +8,7 @@ import {
     getAllRestaurants,
     getRestaurantById,
     getRestaurantMenu,
+    updateRestaurantLocation,
     deleteMenuItem,
     updateMenuItem
 } from "../controller/restaurant.controller.js";
@@ -17,7 +18,9 @@ import {
     createOrder,
     getAvailableAgentOrders,
     getAgentActiveOrders,
-    updateAgentOrderDecision
+    updateAgentOrderDecision,
+    updateAgentOrderStatus,
+    updateRestaurantOrderStatus
 } from "../controller/order.controller.js";
 
 const router = express.Router();
@@ -34,6 +37,7 @@ router.post("/restaurantLogin",restaurantLogin);
 router.get("/restaurants", getAllRestaurants);
 router.get("/restaurants/nearby/:location",getNearbyRestaurants);
 router.get("/restaurants/:restaurantId", getRestaurantById);
+router.patch("/restaurants/:restaurantId/location", updateRestaurantLocation);
 router.get("/restaurant/orders/:restaurantId", getRestaurantOrders);
 // DELETE
 router.delete("/menu/:id", deleteMenuItem);
@@ -46,9 +50,11 @@ router.get("/restaurant/:id/menu", getRestaurantMenu);
 
 //order
 router.post("/order",createOrder)
+router.patch("/restaurant/orders/:orderId/status", updateRestaurantOrderStatus)
 router.get("/agent/orders/available/:agentId", getAvailableAgentOrders)
 router.get("/agent/orders/active/:agentId", getAgentActiveOrders)
 router.patch("/agent/orders/:orderId/decision", updateAgentOrderDecision)
+router.patch("/agent/orders/:orderId/status", updateAgentOrderStatus)
 
 //addmenu
 router.post("/addMenu",addMenu)

@@ -15,6 +15,11 @@ const categorySchema = new mongoose.Schema({
 });
 
 // Restaurant Schema
+const coordinatesSchema = new mongoose.Schema({
+    lat: Number,
+    lng: Number
+}, { _id: false });
+
 const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -26,6 +31,10 @@ const restaurantSchema = new mongoose.Schema({
             ]},
     location: {
         type: String,
+    },
+    locationCoordinates: {
+        type: coordinatesSchema,
+        default: null
     },
     menu: {
         type: [categorySchema],

@@ -1,5 +1,10 @@
 import mongoose from "../config/connection.Db.js";
 
+const coordinatesSchema = new mongoose.Schema({
+    lat: Number,
+    lng: Number
+}, { _id: false });
+
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -24,6 +29,10 @@ const userSchema = new mongoose.Schema({
         require:true,
         trim:true
     },
-    address:String
+    address:String,
+    addressCoordinates: {
+        type: coordinatesSchema,
+        default: null
+    }
 })
 export default mongoose.model("User",userSchema);
