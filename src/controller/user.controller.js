@@ -45,7 +45,7 @@ export async function userLogin(req, res) {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email: email }, { _id: 0, name: 1, password: 1 })
+        const user = await User.findOne({ email: email })
 
             if (!user) {
                 return res.status(StatusCodes.BAD_REQUEST.code).json({
@@ -68,7 +68,13 @@ export async function userLogin(req, res) {
             return res.status(StatusCodes.OK.code).json({
                 code: StatusCodes.OK.code,
                 message: StatusCodes.OK.message,
-                data: { name: user.name }
+                data: {
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    mob: user.mob,
+                    address: user.address
+                }
             });
     } catch (err) {
         console.log("login error", err);
