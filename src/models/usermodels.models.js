@@ -5,10 +5,16 @@ import mongoose from "../config/connection.Db.js";
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
+        minLength:[3,"add proper name"],
+        maxLength:[15,"add proper name"]
     },
     email:{
         type:String,
-        unique:true},
+        unique:true,
+        minLength:[13,"add proper email"],
+        maxLength:[200,"add proper email"]
+    },
+
     password:{
             type:String,
             required:true,

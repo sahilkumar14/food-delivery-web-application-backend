@@ -17,7 +17,7 @@ router.get("/agentLogin",agentLogin);
 router.post("/restaurantSignup",createRestorant);
 router.get("/restaurantLogin",restaurantLogin);
 router.get("/restaurants/nearby/:location",getNearbyRestaurants);
-
+ 
 //order
 router.post("/order",createOrder)
 

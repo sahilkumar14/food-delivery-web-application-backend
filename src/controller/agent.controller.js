@@ -25,7 +25,7 @@ export async function createAgent(req, res) {
             phone,
             vehicleNo
         });
-
+ 
         await newAgent.save();
 
         return res.status(StatusCodes.CREATED.code).json({

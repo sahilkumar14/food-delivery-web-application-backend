@@ -99,7 +99,7 @@ export async function addMenu(req,res){
                 message: "Restaurant not exists with this email",
                 data: existingRestaurant
             });
-        }
+        } 
         if(!menu){
              return res.status(StatusCodes.BAD_REQUEST.code).json({
                 code: StatusCodes.BAD_REQUEST.code,

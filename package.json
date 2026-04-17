@@ -14,7 +14,7 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "scripts": {
+  "scripts": { 
     "dev": "nodemon index.js"
   },
   "keywords": [],

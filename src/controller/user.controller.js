@@ -23,7 +23,7 @@ export async function createUser(req,res){
                 message:StatusCodes.CREATED.message,
                 data:null
             })
-    }catch(err){
+    }catch(err){ 
         console.log("create ",err);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR.code).json({
             code:StatusCodes.INTERNAL_SERVER_ERROR.code,
